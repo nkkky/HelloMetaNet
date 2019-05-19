@@ -1,0 +1,1 @@
+# Workshop weekend material for HelloMetanet @ Berlin
