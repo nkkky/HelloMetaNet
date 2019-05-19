@@ -3,9 +3,6 @@
 <head>
   <script type="text/javascript" src="https://unpkg.com/bsv@0.26.4/bsv.min.js"></script>
   <script src="https://www.moneybutton.com/moneybutton.js"></script>
-  <script>
-    var message = "";
-  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       body {
@@ -52,6 +49,10 @@
         font-size: 0.9em;
         font-style: italic;
       }
+
+      .tab {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -63,16 +64,78 @@
           Please write something to publish below.<br>
           Be careful, you are responsible for what you write, it will be stored immutably on the blockchain too.
         </p>
-        <textarea id="myTextarea"
-          style="width:350px; height:200px;"
-          onchange="changeMessage()"></textarea>
+        <form id="channelForm" onsubmit="submitMessage()">
+          <div class="tab">
+            <input id="channelInput" placeholder="Enter a channel" oninput="this.className = ''">
+          </div>
+          <div class="tab">
+            <input id="myTextarea" placeholder="Your message" oninput="this.className = ''">
+          </div>
+          <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+          </div>
+        </form>
         <br />
         <div id="my-money-button"></div>
         <script src="https://www.moneybutton.com/moneybutton.js"></script>
         <script>
-          function changeMessage(){
-            message = document.getElementById("myTextarea").value;
-            message = bsv.Script.buildDataOut(['HELLOMETANET', "" + message]).toASM();
+          var currentTab = 0; // Current tab is set to be the first tab (0)
+          showTab(currentTab); // Display the current tab
+
+          function showTab(n) {
+            // This function will display the specified tab of the form ...
+            var x = document.getElementsByClassName("tab");
+            x[n].style.display = "block";
+            // ... and fix the Previous/Next buttons:
+            if (n == (x.length - 1)) {
+              document.getElementById("nextBtn").innerHTML = "Submit";
+            } else {
+              document.getElementById("nextBtn").innerHTML = "Next";
+            }
+          }
+
+          function nextPrev(n) {
+            // This function will figure out which tab to display
+            var x = document.getElementsByClassName("tab");
+            // Hide the current tab:
+            x[currentTab].style.display = "none";
+            // Increase or decrease the current tab by 1:
+            currentTab = currentTab + n;
+            // if you have reached the end of the form... :
+            if (currentTab >= x.length) {
+              //...the form gets submitted:
+              submitMessage();
+              return false;
+            }
+            // Otherwise, display the correct tab:
+            showTab(currentTab);
+          }
+
+          function fixStepIndicator(n) {
+            // This function removes the "active" class of all steps...
+            var i, x = document.getElementsByClassName("step");
+            for (i = 0; i < x.length; i++) {
+              x[i].className = x[i].className.replace(" active", "");
+            }
+            //... and adds the "active" class to the current step:
+            x[n].className += " active";
+          }
+
+          // var input = document.getElementById("myInput");
+          // // Execute a function when the user releases a key on the keyboard
+          // input.addEventListener("keyup", function(event) {
+          //   // Number 13 is the "Enter" key on the keyboard
+          //   if (event.keyCode === 13) {
+          //     // Cancel the default action, if needed
+          //     event.preventDefault();
+          //     // Trigger the button element with a click
+          //     document.getElementById("myBtn").click();
+          //   }
+          // });
+
+          function submitMessage(){
+            var channel = '#' + document.getElementById("channelInput").value;
+            var message = document.getElementById("myTextarea").value;
+            message = bsv.Script.buildDataOut(["HELLOMETANET", channel, message]).toASM();
             const div = document.getElementById('my-money-button');
             moneyButton.render(div, {
               outputs: [{
@@ -127,7 +190,7 @@
                   }
                   allResults.forEach(tx => {
                     console.log(tx.out);
-                    const message = tx.out[0].s2;
+                    const message = tx.out[0].s2 + ': ' + tx.out[0].s3;
                     appendMessage(message);
                   });
                 });
@@ -152,7 +215,7 @@
                   const data = JSON.parse(e.data);
                   console.log('on message', data);
                   data.data.forEach(tx => {
-                    appendMessage(tx.out[0].s2);
+                    appendMessage(tx.out[0].s2 + ': ' + tx.out[0].s3);
                   });
                 };
               }
