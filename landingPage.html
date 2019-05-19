@@ -7,52 +7,7 @@
     var message = "";
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: Arial;
-            color: white;
-        }
-
-        .split {
-            height: 100%;
-            width: 50%;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            overflow-x: hidden;
-            padding-top: 20px;
-        }
-
-        .left {
-            left: 0;
-            background-color: #111;
-        }
-
-        .right {
-            right: 0;
-            background: #c31432; /* fallback for old browsers */
-            background: -webkit-linear-gradient(to right, #240b36, #c31432); /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to left, #240b36, #c31432); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        }
-
-        .centered {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-            .centered img {
-                width: 150px;
-                border-radius: 50%;
-            }
-
-        h2 {
-            font-size: 0.9em;
-            font-style: italic;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
     <div class="split left">
@@ -70,6 +25,7 @@
             <script>
                 function changeMessage() {
                     message = document.getElementById("myTextarea1").value;
+                }
             </script>
             <h1>Choose your CHATROOM</h1>
             
