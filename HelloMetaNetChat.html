@@ -30,7 +30,9 @@
 
       .right {
         right: 0;
-        background-color: red;
+        background: #c31432;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #240b36, #c31432);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to left, #240b36, #c31432); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
       }
 
       .centered {
@@ -45,13 +47,22 @@
         width: 150px;
         border-radius: 50%;
       }
+
+      h2{
+        font-size: 0.9em;
+        font-style: italic;
+      }
     </style>
   </head>
   <body>
     <div class="split left">
       <div class="centered">
-        <h1>Hello Meta Net - Publisher</h1>
-        <p>Please write something to publish on the blockchain FOREVER !</p>
+        <h1>MetaChat</h1>
+        <h2>IRC Like channels on the BSV blockchain.</h2>
+        <p>
+          Please write something to publish below.<br>
+          Be careful, you are responsible for what you write, it will be stored immutably on the blockchain too.
+        </p>
         <textarea id="myTextarea"
           style="width:350px; height:200px;"
           onchange="changeMessage()"></textarea>
