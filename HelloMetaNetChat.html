@@ -1,190 +1,160 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript" src="https://unpkg.com/bsv@0.26.4/bsv.min.js"></script>
-    <script src="https://www.moneybutton.com/moneybutton.js"></script>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript" src="https://unpkg.com/bsv@0.26.4/bsv.min.js"></script>
+  <script src="https://www.moneybutton.com/moneybutton.js"></script>
+  <script>
+    var message = "";
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body {
-            font-family: Arial;
-            color: white;
-        }
+      body {
+        font-family: Arial;
+        color: white;
+      }
 
-        .split {
-            height: 100%;
-            width: 50%;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            overflow-x: hidden;
-            padding-top: 20px;
-        }
+      .split {
+        height: 100%;
+        width: 50%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        padding-top: 20px;
+      }
 
-        .left {
-            left: 0;
-            background-color: #111;
-        }
+      .left {
+        left: 0;
+        background-color: #111;
+      }
 
-        .right {
-            right: 0;
-            background-color: red;
-        }
+      .right {
+        right: 0;
+        background-color: red;
+      }
 
-        .centered {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
+      .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+      }
 
-            .centered img {
-                width: 150px;
-                border-radius: 50%;
-            }
+      .centered img {
+        width: 150px;
+        border-radius: 50%;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="split left">
-        <div class="centered">
-            <html>
-
-            <script>
-      var message = "";
-            </script>
-            <h1>Hello Meta Net - Publisher</h1>
-            <p>Please write something to publish on the blockchain FOREVER !</p>
-            <textarea id="myTextarea"
-                      style="width:350px; height:200px;"
-                      onchange="changeMessage()"></textarea>
-            <br />
-            <div id="my-money-button"></div>
-            <script src="https://www.moneybutton.com/moneybutton.js"></script>
-            <script>
-      function changeMessage(){
-        message = document.getElementById("myTextarea").value;
-        message = bsv.Script.buildDataOut(['HELLOMETANET', "" + message]).toASM();
-        const div = document.getElementById('my-money-button');
-        moneyButton.render(div, {
-          outputs: [{
-            type: 'SCRIPT',
-            script: message,
-            amount: '0',
-            currency: 'BSV'
-          }],
-          label: "Publish",
-          clientIdentifier: "b2a2ae826e1846c286b6876027a7be5a",
-          buttonId: "234325",
-          onPayment: function (arg) { console.log('onPayment', arg) },
-          onError: function (arg) { console.log('onError', arg) }
-        })
-    }
-    changeMessage()
-
-            </script>
-
-
-
+      <div class="centered">
+        <h1>Hello Meta Net - Publisher</h1>
+        <p>Please write something to publish on the blockchain FOREVER !</p>
+        <textarea id="myTextarea"
+          style="width:350px; height:200px;"
+          onchange="changeMessage()"></textarea>
+        <br />
+        <div id="my-money-button"></div>
+        <script src="https://www.moneybutton.com/moneybutton.js"></script>
+        <script>
+          function changeMessage(){
+            message = document.getElementById("myTextarea").value;
+            message = bsv.Script.buildDataOut(['HELLOMETANET', "" + message]).toASM();
+            const div = document.getElementById('my-money-button');
+            moneyButton.render(div, {
+              outputs: [{
+                type: 'SCRIPT',
+                script: message,
+                amount: '0',
+                currency: 'BSV'
+              }],
+              label: "Publish",
+              clientIdentifier: "b2a2ae826e1846c286b6876027a7be5a",
+              buttonId: "234325",
+              onPayment: function (arg) { console.log('onPayment', arg) },
+              onError: function (arg) { console.log('onError', arg) }
+            })
+          }
+        </script>
+      </div>
     </div>
-</div>
-
-<div class="split right">
-    <div class="centered">
-        <html>
-        <head>
-            <script src="https://www.moneybutton.com/moneybutton.js"></script>
-        </head>
-        <body>
-
-
-            <h1>Metanet Chat</h1>
-
-
-
-
-            <ul id="posts"></ul>
-
-
+    <div class="split right">
+      <div class="centered">
+        <h1>Metanet Chat</h1>
+          <ul id="posts"></ul>
             <div id='my-money-button'></div>
-
             <script>
-  function loadMessages() {
-    var query = {
-      v: 3,
-      q: {
-        find: {
-          'out.s1': 'HELLOMETANET'
-        },
-        limit: 50
-      }
-    };
-    var b64 = btoa(JSON.stringify(query));
-    var url = 'https://bitgraph.network/q/' + b64;
-    var header = {
-      headers: { key: '1FqXopESziMTrJU4rTYL6vkpPzo41Zhqzy' }
-    };
-    fetch(url, header)
-      .then(function(r) {
-        return r.json();
-      })
-      .then(function(result) {
-        console.log(result);
-        const allResults = [];
-        if (result.u.length) {
-          allResults.push(...result.u);
-        }
-        if (result.c.length) {
-          allResults.push(...result.c);
-        }
-        allResults.forEach(tx => {
-          console.log(tx.out);
-          const message = tx.out[0].s2;
-          appendMessage(message);
-        });
-      });
-  }
-  function initBitScocket() {
-    var query = {
-      v: 3,
-      q: {
-        find: {
-          'out.s1': 'HELLOMETANET'
-        }
-      }
-    };
-    // Encode it in base64 format
-    var b64 = btoa(JSON.stringify(query));
-    // Subscribe
-    var bitsocket = new EventSource(
-      'https://genesis.bitdb.network/s/1FnauZ9aUH2Bex6JzdcV4eNX7oLSSEbxtN/' + b64
-    );
-    // Event handler
-    bitsocket.onmessage = function(e) {
-      const data = JSON.parse(e.data);
-      console.log('on message', data);
-      data.data.forEach(tx => {
-        appendMessage(tx.out[0].s2);
-      });
-    };
-  }
-  const $posts = document.getElementById('posts');
-  function appendMessage(message) {
-    var li = document.createElement('li');
-    li.textContent = message;
-    $posts.insertBefore(li, $posts.children[0]);
-  }
-  loadMessages();
-  initBitScocket();
-
-            </script>
-
-
-        </body>
-    </html>
-</div>
-</div>
-
-</body>
+              function loadMessages() {
+                var query = {
+                  v: 3,
+                  q: {
+                    find: {
+                      'out.s1': 'HELLOMETANET'
+                    },
+                    limit: 50
+                  }
+                };
+                var b64 = btoa(JSON.stringify(query));
+                var url = 'https://bitgraph.network/q/' + b64;
+                var header = {
+                  headers: { key: '1FqXopESziMTrJU4rTYL6vkpPzo41Zhqzy' }
+                };
+                fetch(url, header)
+                  .then(function(r) {
+                    return r.json();
+                  })
+                .then(function(result) {
+                  console.log(result);
+                  const allResults = [];
+                  if (result.u.length) {
+                    allResults.push(...result.u);
+                  }
+                  if (result.c.length) {
+                    allResults.push(...result.c);
+                  }
+                  allResults.forEach(tx => {
+                    console.log(tx.out);
+                    const message = tx.out[0].s2;
+                    appendMessage(message);
+                  });
+                });
+              }
+              function initBitScocket() {
+                var query = {
+                  v: 3,
+                  q: {
+                    find: {
+                      'out.s1': 'HELLOMETANET'
+                    }
+                  }
+                };
+                // Encode it in base64 format
+                var b64 = btoa(JSON.stringify(query));
+                // Subscribe
+                var bitsocket = new EventSource(
+                  'https://genesis.bitdb.network/s/1FnauZ9aUH2Bex6JzdcV4eNX7oLSSEbxtN/' + b64
+                );
+                // Event handler
+                bitsocket.onmessage = function(e) {
+                  const data = JSON.parse(e.data);
+                  console.log('on message', data);
+                  data.data.forEach(tx => {
+                    appendMessage(tx.out[0].s2);
+                  });
+                };
+              }
+            const $posts = document.getElementById('posts');
+            function appendMessage(message) {
+              var li = document.createElement('li');
+              li.textContent = message;
+              $posts.insertBefore(li, $posts.children[0]);
+            }
+            loadMessages();
+            initBitScocket();
+          </script>
+        </div>
+      </div>
+  </body>
 </html>
