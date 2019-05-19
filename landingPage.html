@@ -18,7 +18,7 @@
     </div>
     <div class="split right">
         <div class="centered">
-            <h1>Please ENTER YOUR PRIVATE KEY or STIFF</h1>
+            <h1>Please ENTER THE CHANNEL you want to join!</h1>
             <textarea id="myTextarea1"
                       style="width:350px; height:30px;"
                       onchange="changeMessage()"></textarea>
@@ -26,19 +26,30 @@
                 function changeMessage() {
                     message = document.getElementById("myTextarea1").value;
                 }
+                
             </script>
-            <h1>Choose your CHATROOM</h1>
+            <h1> or CHOOSE YOUR CHATROOM</h1>
+
+            <label>
+                <!--Channel(s):## -->
+                <select id="aaa" name="top5" size="5" autofocus>
+                    <option value="1">HelloMetaChat</option>
+                    <option value="2">Berlin</option>
+                    <option value="3">BitcoinSV</option>
+                    <option value="4">General</option>
+                </select>
+            </label>
+
+            <h1></h1>
             
-            <form action="select.html">
-                <label>
-                    <!--Channel(s):## -->
-                    <select name="top5" size="5">
-                        <option>HelloMetaChat</option>
-                        <option>Berlin</option>
-                        <option>BitcoinSV</option>
-                    </select>
-                </label>
-            </form>
+            <button onclick="changePage()">Enter the bankruptcy!</button>
+            <script>function changePage() {
+    var e = document.getElementById("aaa");
+    var chatroom = e.options[e.selectedIndex].text;
+                    window.location.href = "HelloMetaNetChat.html#" + chatroom;
+                }</script>
+
+
         </div>
     </div>
 </body>
